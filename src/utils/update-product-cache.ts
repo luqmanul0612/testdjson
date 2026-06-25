@@ -2,8 +2,8 @@ import queryClient from "@/lib/queryClient";
 import type { GetProductsResponse, ProductRecord } from "@/types/product";
 import type { AxiosResponse } from "axios";
 
-export const addProductToCache = (data: ProductRecord, params: any) => {
-  queryClient.setQueryData(["products", params], (oldData: AxiosResponse<GetProductsResponse> | undefined) => {
+export const addProductToCache = (data: ProductRecord, queryKeys: any) => {
+  queryClient.setQueryData(queryKeys, (oldData: AxiosResponse<GetProductsResponse> | undefined) => {
     if (!oldData) return oldData;
     const newProduct: ProductRecord = {
       ...data,
@@ -22,8 +22,8 @@ export const addProductToCache = (data: ProductRecord, params: any) => {
   });
 };
 
-export const updateProductInCache = (data: ProductRecord, params: any) => {
-  queryClient.setQueryData(["products", params], (oldData: AxiosResponse<GetProductsResponse> | undefined) => {
+export const updateProductInCache = (data: ProductRecord, queryKeys: any) => {
+  queryClient.setQueryData(queryKeys, (oldData: AxiosResponse<GetProductsResponse> | undefined) => {
     if (!oldData) return oldData;
     return {
       ...oldData,
@@ -35,8 +35,8 @@ export const updateProductInCache = (data: ProductRecord, params: any) => {
   });
 };
 
-export const deleteProductFromCache = (id: number, params: any) => {
-  queryClient.setQueryData(["products", params], (oldData: AxiosResponse<GetProductsResponse> | undefined) => {
+export const deleteProductFromCache = (id: number, queryKeys: any) => {
+  queryClient.setQueryData(queryKeys, (oldData: AxiosResponse<GetProductsResponse> | undefined) => {
     if (!oldData) return oldData;
     return {
       ...oldData,

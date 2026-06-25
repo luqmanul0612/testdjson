@@ -62,22 +62,25 @@ const ProductContainer = () => {
     // harusnya pakai invalidateQueries tapi karena server tidak update product, jadi pakai setQueryData
     // queryClient.invalidateQueries({ queryKey: ["products"] });
     // queryClient.invalidateQueries({ queryKey: ["products-search"] });
-    addProductToCache(data, params);
+    const queryKeys = searchDebounce ? ["products-search", params, searchDebounce] : ["products", params];
+    addProductToCache(data, queryKeys);
     message.success("Product added successfully");
   };
 
   const onSuccessEditProduct = (data: ProductRecord) => {
-    updateProductInCache(data, params);
+    const queryKeys = searchDebounce ? ["products-search", params, searchDebounce] : ["products", params];
+    updateProductInCache(data, queryKeys);
     message.success("Product updated successfully");
   };
 
   const onSuccessDeleteProduct = (id: number) => {
-    deleteProductFromCache(id, params);
+    const queryKeys = searchDebounce ? ["products-search", params, searchDebounce] : ["products", params];
+    deleteProductFromCache(id, queryKeys);
     message.success("Product deleted successfully");
   };
 
   const onChangeSearch = (value: string) => {
-    setSearchDebounce(value); 
+    setSearchDebounce(value);
     if (params.skip !== 0) {
       setParams((prev) => ({ ...prev, skip: 0 }));
     }
