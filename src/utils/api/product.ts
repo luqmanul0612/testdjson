@@ -12,11 +12,16 @@ export const getProduct = async (id: number) => {
 };
 
 export const postProduct = async (data: Partial<GetProductResponse>) => {
-  const response = await axiosInstance.post<GetProductResponse>(`/products`, data);
+  const response = await axiosInstance.post<GetProductResponse>(`/products/add`, data);
   return response;
 };
 
 export const putProduct = async (id: number, data: Partial<GetProductResponse>) => {
   const response = await axiosInstance.put<GetProductResponse>(`/products/${id}`, data);
+  return response;
+};
+
+export const deleteProduct = async (id: number) => {
+  const response = await axiosInstance.delete(`/products/${id}`);
   return response;
 };

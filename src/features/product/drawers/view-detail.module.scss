@@ -1,0 +1,58 @@
+@use "@/utils/styles/colors";
+
+.detailContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  .thumbnail {
+    border-bottom: 1px solid colors.$slate-200;
+  }
+  .detailItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #001529;
+      min-width: 100px;
+    }
+    .value {
+      font-size: 14px;
+      font-weight: 400;
+      color: #001529;
+      &.price {
+        color: colors.$green-600;
+        font-weight: 600;
+      }
+      &.stock {
+        color: colors.$blue-600;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 4px;
+        &.low {
+          color: colors.$red-600;
+          background-color: colors.$red-100;
+        }
+        &.medium {
+          color: colors.$yellow-600;
+          background-color: colors.$yellow-100;
+        }
+        &.high {
+          color: colors.$green-600;
+          background-color: colors.$green-100;
+        }
+      }
+      &.rating {
+        color: colors.$yellow-500;
+        font-weight: 600;
+      }
+      &.availability {
+        color: colors.$slate-400;
+        font-weight: 600;
+        font-size: 13px;
+      }
+    }
+  }
+}

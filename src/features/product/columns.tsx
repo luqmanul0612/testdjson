@@ -6,13 +6,11 @@ import clsx from "clsx";
 
 interface Props {
   handleEdit: (data: ProductRecord) => void;
+  handleViewDetail: (data: ProductRecord) => void;
+  handleDelete: (data: ProductRecord) => void;
 }
 
-const useProductColumns = ({ handleEdit }: Props) => {
- 
-  const onClickEdit = (record: ProductRecord) => {
-    handleEdit(record);
-  };
+const useProductColumns = ({ handleEdit, handleViewDetail, handleDelete }: Props) => {
   const columns: TableColumnsType<ProductRecord> = [
     {
       title: "No.",
@@ -74,7 +72,7 @@ const useProductColumns = ({ handleEdit }: Props) => {
               type="primary"
               color="blue"
               variant="filled"
-              onClick={() => onClickEdit(record)}
+              onClick={() => handleViewDetail(record)}
             >
               <EyeIcon className={cn.icon} />
             </Button>
@@ -96,7 +94,7 @@ const useProductColumns = ({ handleEdit }: Props) => {
               type="primary"
               color="red"
               variant="filled"
-              onClick={() => handleEdit(record)}
+              onClick={() => handleDelete(record)}
             >
               <TrashIcon className={cn.icon} />
             </Button>

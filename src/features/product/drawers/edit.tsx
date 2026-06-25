@@ -1,6 +1,6 @@
 import type { ProductForm, ProductRecord } from "@/types/product";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button, Drawer, Form, Input, InputNumber } from "antd";
+import { App, Button, Drawer, Form, Input, InputNumber } from "antd";
 import { useEffect } from "react";
 import cn from "./edit.module.scss";
 import { getProduct, putProduct } from "@/utils/api/product";
@@ -12,7 +12,8 @@ interface Props {
   onSuccess?: (data: ProductRecord) => void;
 }
 
-const EditDrawer = ({ open, onClose, data, onSuccess }: Props) => {
+const EditProductDrawer = ({ open, onClose, data, onSuccess }: Props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm<ProductForm>();
 
   const query = useQuery({
@@ -27,6 +28,9 @@ const EditDrawer = ({ open, onClose, data, onSuccess }: Props) => {
     onSuccess: (res) => {
       onClose();
       onSuccess?.(res.data);
+    },
+    onError: () => {
+      message.error("Failed to update product");
     },
   });
 
@@ -47,6 +51,13 @@ const EditDrawer = ({ open, onClose, data, onSuccess }: Props) => {
     }
   }, [query.data]);
 
+  useEffect(() => {
+    if (query.isError) {
+      onClose();
+      message.error("Failed to fetch product data");
+    }
+  }, [query.isError]);
+
   return (
     <Drawer
       title="Edit Product"
@@ -57,7 +68,6 @@ const EditDrawer = ({ open, onClose, data, onSuccess }: Props) => {
       zIndex={9999}
       forceRender
       loading={query.isLoading}
-      mask={{ closable: false }}
       footer={
         <div className={cn.footer}>
           <Button type="primary" onClick={form.submit} loading={mutation.isPending} disabled={query.isLoading}>
@@ -94,4 +104,4 @@ const EditDrawer = ({ open, onClose, data, onSuccess }: Props) => {
   );
 };
 
-export default EditDrawer;
+export default EditProductDrawer;
