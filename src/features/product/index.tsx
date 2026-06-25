@@ -2,7 +2,7 @@ import { App, Breadcrumb, Button, Card, Table } from "antd";
 import cn from "./styles.module.scss";
 import useProductColumns from "./columns";
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/utils/api/product";
+import { getProducts, getProductsSearch } from "@/utils/api/product";
 import { useState } from "react";
 import type { GetProductsRequest, ProductRecord } from "@/types/product";
 import Paginaton from "@/components/pagination";
@@ -11,6 +11,8 @@ import ViewDetailProductDrawer from "./drawers/view-detail";
 import AddProductDrawer from "./drawers/add";
 import DeleteProductModal from "./modals/delete";
 import { addProductToCache, deleteProductFromCache, updateProductInCache } from "@/utils/update-product-cache";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import SearchInput from "@/components/search-input";
 
 interface DrawerState {
   open: boolean;
@@ -20,25 +22,36 @@ interface DrawerState {
 
 const ProductContainer = () => {
   const { message } = App.useApp();
+  const [searchDebounce, setSearchDebounce] = useState("");
+
   const [drawerState, setDrawerState] = useState<DrawerState>({
     open: false,
     data: null,
   });
+
   const [params, setParams] = useState<Required<GetProductsRequest>>({
     limit: 25,
     skip: 0,
     select: "id,sku,title,price,stock,rating,brand,category",
   });
+
   const { columns } = useProductColumns({
     handleViewDetail: (data: ProductRecord) => setDrawerState({ open: true, type: "view-detail", data }),
     handleEdit: (data: ProductRecord) => setDrawerState({ open: true, type: "edit", data }),
     handleDelete: (data: ProductRecord) => setDrawerState({ open: true, type: "delete", data }),
   });
 
-  const { data, isLoading } = useQuery({
+  const productQuery = useQuery({
     queryKey: ["products", params],
     queryFn: () => getProducts(params),
     select: (data) => data.data,
+  });
+
+  const productSearchQuery = useQuery({
+    queryKey: ["products-search", params, searchDebounce],
+    queryFn: () => getProductsSearch({ q: searchDebounce, limit: params.limit, skip: params.skip }),
+    select: (data) => data.data,
+    enabled: !!searchDebounce,
   });
 
   const onChangePage = (limit: number, skip: number) => {
@@ -47,24 +60,31 @@ const ProductContainer = () => {
 
   const onSuccessAddProduct = (data: ProductRecord) => {
     // harusnya pakai invalidateQueries tapi karena server tidak update product, jadi pakai setQueryData
-    // queryClient.invalidateQueries({ queryKey: ["product"] });
+    // queryClient.invalidateQueries({ queryKey: ["products"] });
+    // queryClient.invalidateQueries({ queryKey: ["products-search"] });
     addProductToCache(data, params);
     message.success("Product added successfully");
   };
 
   const onSuccessEditProduct = (data: ProductRecord) => {
-    // harusnya pakai invalidateQueries tapi karena server tidak update product, jadi pakai setQueryData
-    // queryClient.invalidateQueries({ queryKey: ["product"] });
     updateProductInCache(data, params);
     message.success("Product updated successfully");
   };
 
   const onSuccessDeleteProduct = (id: number) => {
-    // harusnya pakai invalidateQueries tapi karena server tidak update product, jadi pakai setQueryData
-    // queryClient.invalidateQueries({ queryKey: ["product"] });
     deleteProductFromCache(id, params);
     message.success("Product deleted successfully");
   };
+
+  const onChangeSearch = (value: string) => {
+    setSearchDebounce(value); 
+    if (params.skip !== 0) {
+      setParams((prev) => ({ ...prev, skip: 0 }));
+    }
+  };
+
+  const dataSource = searchDebounce ? productSearchQuery.data?.products : productQuery.data?.products;
+  const isLoading = searchDebounce ? productSearchQuery.isFetching : productQuery.isFetching;
 
   return (
     <div className={cn.main}>
@@ -76,25 +96,35 @@ const ProductContainer = () => {
         ]}
       />
       <div className={cn.content}>
+        <div className={cn.header}>
+          <Button
+            type="primary"
+            icon={<PlusIcon width={16} height={16} />}
+            onClick={() => setDrawerState({ open: true, type: "add", data: null })}
+          >
+            Add Product
+          </Button>
+        </div>
         <Card
           classNames={{ root: cn.card, body: cn.cardBody }}
           title="Product List"
-          extra={
-            <Button type="primary" onClick={() => setDrawerState({ open: true, type: "add", data: null })}>
-              Add Product
-            </Button>
-          }
+          extra={<SearchInput onChange={(value) => onChangeSearch(value)} />}
         >
           <Table
             className={cn.table}
             scroll={{ x: true }}
             loading={isLoading}
             columns={columns}
-            dataSource={data?.products}
+            dataSource={dataSource}
             rowKey="id"
             pagination={false}
           />
-          <Paginaton limit={params.limit} skip={params.skip} total={data?.total || 0} onChange={onChangePage} />
+          <Paginaton
+            limit={params.limit}
+            skip={params.skip}
+            total={(searchDebounce ? productSearchQuery.data?.total : productQuery.data?.total) || 0}
+            onChange={onChangePage}
+          />
         </Card>
       </div>
       <AddProductDrawer

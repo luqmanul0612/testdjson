@@ -5,6 +5,9 @@ export interface PaginationParams {
 }
 
 export interface GetProductsRequest extends PaginationParams {}
+export interface GetProductsSearchRequest extends PaginationParams {
+  q: string;
+}
 
 export interface ProductRecord {
   id: number;

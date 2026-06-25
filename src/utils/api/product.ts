@@ -1,8 +1,13 @@
-import type { GetProductResponse, GetProductsRequest, GetProductsResponse } from "@/types/product";
+import type { GetProductResponse, GetProductsRequest, GetProductsResponse, GetProductsSearchRequest } from "@/types/product";
 import axiosInstance from "@/lib/axios";
 
 export const getProducts = async (params: GetProductsRequest) => {
   const response = await axiosInstance.get<GetProductsResponse>(`/products`, { params });
+  return response;
+};
+
+export const getProductsSearch = async (params: GetProductsSearchRequest) => {
+  const response = await axiosInstance.get<GetProductsResponse>(`/products/search`, { params });
   return response;
 };
 
