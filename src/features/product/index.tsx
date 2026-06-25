@@ -49,7 +49,13 @@ const ProductContainer = () => {
 
   const productSearchQuery = useQuery({
     queryKey: ["products-search", params, searchDebounce],
-    queryFn: () => getProductsSearch({ q: searchDebounce, limit: params.limit, skip: params.skip }),
+    queryFn: () =>
+      getProductsSearch({
+        q: searchDebounce,
+        limit: params.limit,
+        skip: params.skip,
+        select: "id,sku,title,price,stock,rating,brand,category",
+      }),
     select: (data) => data.data,
     enabled: !!searchDebounce,
   });
