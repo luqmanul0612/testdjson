@@ -87,7 +87,7 @@ const ProductContainer = () => {
   };
 
   const dataSource = searchDebounce ? productSearchQuery.data?.products : productQuery.data?.products;
-  const isLoading = searchDebounce ? productSearchQuery.isFetching : productQuery.isFetching;
+  const isLoading = searchDebounce ? productSearchQuery.isLoading : productQuery.isLoading;
 
   return (
     <div className={cn.main}>

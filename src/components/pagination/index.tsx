@@ -18,7 +18,12 @@ const Paginaton: React.FC<Props> = ({ limit, skip, total, onChange }) => {
   return (
     <div className={cn.main}>
       <div className={cn.perPage}>
-        Item per page <Select options={LIMITS.map((item) => ({ value: item, label: item }))} value={limit} />
+        Item per page{" "}
+        <Select
+          options={LIMITS.map((item) => ({ value: item, label: item }))}
+          value={limit}
+          onChange={(pageSize) => onChangePagination(1, pageSize)}
+        />
         <p className={cn.pageInfo}>{`${skip + 1} - ${limit * (skip / limit + 1)} of ${total}`}</p>
       </div>
       <AntPagination
