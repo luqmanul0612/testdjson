@@ -1,76 +1,83 @@
-# React + TypeScript + Vite
+# Technical Test — Product Management Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A product management dashboard built as part of a frontend technical assessment. The app consumes the [DummyJSON](https://dummyjson.com) public API and supports product listing, search, add, edit, delete, and pagination.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[https://testdjson.vercel.app](https://testdjson.vercel.app)
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Category | Library / Tool |
+|---|---|
+| Framework | React 19 |
+| Language | TypeScript |
+| Build Tool | Vite 8 |
+| UI Library | Ant Design 6 |
+| Routing | TanStack Router v1 |
+| Server State | TanStack Query v5 |
+| Client State | Zustand v5 |
+| HTTP Client | Axios |
+| Styling | SCSS Modules |
+| Icons | Heroicons |
+| Package Manager | pnpm |
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Product list with pagination
+- Search product with debounce
+- Add product
+- Edit product
+- Delete product
+- View product detail
+- Optimistic cache update (without refetch)
+- Authentication (login/logout)
+- Protected routes
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js >= 18
+- pnpm
 
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/username/testdjson.git
+cd testdjson
+
+# Install dependencies
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Environment Variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a `.env` file in the root directory:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_URL=https://dummyjson.com
+```
+
+### Running the App
+
+```bash
+# Development
+pnpm dev
+
+# Build
+pnpm build
+
+# Preview build
+pnpm preview
+```
+
+## Login Credentials
+
+Uses DummyJSON auth:
 
 ```
-# testdjson
+Username: emilys
+Password: emilyspass
+```
