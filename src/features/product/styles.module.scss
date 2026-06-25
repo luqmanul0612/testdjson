@@ -1,0 +1,78 @@
+@use "@/utils/styles/colors";
+
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  .content {
+    display: flex;
+    flex-direction: column;
+    .card {
+      margin-top: 20px;
+      .cardBody {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+    }
+  }
+}
+
+.table {
+  :global(.ant-table-body) {
+    min-height: 400px;
+  }
+  :global(.ant-spin-container) {
+    min-height: 400px;
+  }
+  .title {
+    min-width: 250px;
+  }
+  .noWrap {
+    white-space: nowrap;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    .actionButton {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      font-size: 14px;
+      font-weight: 600;
+      height: 30px;
+    }
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.stock {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 8px;
+  height: 30px;
+  width: fit-content;
+  min-width: 30px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.low {
+    color: colors.$red-600;
+    background-color: colors.$red-100;
+  }
+  &.medium {
+    color: colors.$yellow-600;
+    background-color: colors.$yellow-100;
+  }
+  &.high {
+    color: colors.$green-600;
+    background-color: colors.$green-100;
+  }
+}
